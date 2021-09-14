@@ -93,32 +93,20 @@ movies = pd.DataFrame({
 
 # in order to clean up data you must know what each data type has been stored as:
 # print(movies.dtypes)
-# results I got initially were:
-# movie           object
-# year            object
-# length          object
-# genre           object
-# IMDb ratings    float64		because I classified it as float() earlier
-# Metascore       int64			because I classified it as int() earlier
-# US gross        object
 
 # cleaning up data:
 # \d+ says to start extracting at the 1st digit, "+" means that it must have at least 1 digit
 # \d* "*" means you can start at 0 integers
-# astype(): https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.astype.html
 movies['year'] = movies['year'].str.extract('(\d+)').astype(int)
 movies['length (min)'] = movies['length (min)'].str.extract('(\d+)').astype(int)
-# movies['US gross (millions)'] = movies['US gross (millions)'].str.replace('M', '').str.replace('$', '').astype(float)
-movies['US gross (millions)'] = movies['US gross (millions)'].map(lambda x: x.lstrip('$').rstrip('M'))
+
+# online tutorial way of doing it:
+# movies['US gross (millions)'] = movies['US gross (millions)'].map(lambda x: x.lstrip('$').rstrip('M'))
+movies['US gross (millions)'] = movies['US gross (millions)'].str.replace('M', '').str.replace('$', '')
 movies['US gross (millions)'] = pd.to_numeric(movies['US gross (millions)'], errors='coerce')
+
 
 # print(movies.dtypes)
 
-# specify location to save csv file
-movies.to_csv('/Users/anjawu/Code/IMDbmovies.csv')
-
-
-
-
-
-
+# Specifically saving in correct folder, using absolute file path
+movies.to_csv('/Users/anjawu/Code/imdb-web-scraping/IMDbmovies.csv')

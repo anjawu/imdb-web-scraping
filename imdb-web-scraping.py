@@ -6,15 +6,12 @@ import requests
 from bs4 import BeautifulSoup
 # will help us assemble the data into a DataFrame to clean and analyze it
 import pandas as pd
-# will add support for mathematical functions and tools for working with arrays
-import numpy as np
 
 # since scrapping source, languages of movies can change, so ensure it is English by:
 headers = {"Accept-Language": "en-US, en;q=0.5"}
 
 URL = 'https://www.imdb.com/search/title/?groups=top_1000&ref_=adv_prv'
 
-# I do NOT get this part of the code. Why is there headers = headers?
 results = requests.get(URL, headers = headers)
 soup = BeautifulSoup(results.text, 'html.parser')
 #print(soup.prettify())
@@ -117,7 +114,7 @@ movies['US gross (millions)'] = pd.to_numeric(movies['US gross (millions)'], err
 
 # print(movies.dtypes)
 
-# how to specify location to save csv file?
+# specify location to save csv file
 movies.to_csv('/Users/anjawu/Code/IMDbmovies.csv')
 
 

@@ -12,7 +12,6 @@ headers = {"Accept-Language": "en-US, en;q=0.5"}
 
 URL = 'https://www.imdb.com/search/title/?groups=top_1000&ref_=adv_prv'
 
-
 results = requests.get(URL, headers = headers)
 soup = BeautifulSoup(results.text, 'html.parser')
 #print(soup.prettify())
@@ -107,7 +106,7 @@ movies['US gross (millions)'] = movies['US gross (millions)'].str.replace('M', '
 movies['US gross (millions)'] = pd.to_numeric(movies['US gross (millions)'], errors='coerce')
 
 
-print(movies.dtypes)
+# print(movies.dtypes)
 
 # Specifically saving in correct folder, using absolute file path
 movies.to_csv('/Users/anjawu/Code/imdb-web-scraping/IMDbmovies.csv')

@@ -6,15 +6,13 @@ import requests
 from bs4 import BeautifulSoup
 # will help us assemble the data into a DataFrame to clean and analyze it
 import pandas as pd
-# will add support for mathematical functions and tools for working with arrays
-import numpy as np
 
 # since scrapping source, languages of movies can change, so ensure it is English by:
 headers = {"Accept-Language": "en-US, en;q=0.5"}
 
 URL = 'https://www.imdb.com/search/title/?groups=top_1000&ref_=adv_prv'
 
-# I do NOT get this part of the code. Why is there headers = headers?
+
 results = requests.get(URL, headers = headers)
 soup = BeautifulSoup(results.text, 'html.parser')
 #print(soup.prettify())
@@ -96,32 +94,20 @@ movies = pd.DataFrame({
 
 # in order to clean up data you must know what each data type has been stored as:
 # print(movies.dtypes)
-# results I got initially were:
-# movie           object
-# year            object
-# length          object
-# genre           object
-# IMDb ratings    float64		because I classified it as float() earlier
-# Metascore       int64			because I classified it as int() earlier
-# US gross        object
 
 # cleaning up data:
 # \d+ says to start extracting at the 1st digit, "+" means that it must have at least 1 digit
 # \d* "*" means you can start at 0 integers
-# astype(): https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.astype.html
 movies['year'] = movies['year'].str.extract('(\d+)').astype(int)
 movies['length (min)'] = movies['length (min)'].str.extract('(\d+)').astype(int)
-# movies['US gross (millions)'] = movies['US gross (millions)'].str.replace('M', '').str.replace('$', '').astype(float)
-movies['US gross (millions)'] = movies['US gross (millions)'].map(lambda x: x.lstrip('$').rstrip('M'))
+
+# online tutorial way of doing it:
+# movies['US gross (millions)'] = movies['US gross (millions)'].map(lambda x: x.lstrip('$').rstrip('M'))
+movies['US gross (millions)'] = movies['US gross (millions)'].str.replace('M', '').str.replace('$', '')
 movies['US gross (millions)'] = pd.to_numeric(movies['US gross (millions)'], errors='coerce')
 
-# print(movies.dtypes)
 
-# how to specify location to save csv file?
-movies.to_csv('/Users/anjawu/Code/IMDbmovies.csv')
+print(movies.dtypes)
 
-
-
-
-
-
+# Specifically saving in correct folder, using absolute file path
+movies.to_csv('/Users/anjawu/Code/imdb-web-scraping/IMDbmovies.csv')
